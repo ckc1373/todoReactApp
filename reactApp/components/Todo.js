@@ -6,12 +6,12 @@ function Todo(props){
   let start;
   let end;
   return (props.task.completed) ?
-    (<li><button onClick={()=>{props.todoXClick(props.index)}}>X</button>
-        <strike>{props.task.taskText}</strike>
-        <button onClick={()=>{props.itemToggle(props.index)}}>Completed</button></li>) :
-    (<li><button onClick={()=>{props.todoXClick(props.index)}}>X</button>
-        {props.task.taskText}
-        <button onClick={()=>{props.itemToggle(props.index)}}>Completed</button></li>)
+    (<li><button onClick={()=>{props.todoXClick(props.id)}}>X</button>
+        <strike>{props.task.task}</strike>
+        <button onClick={()=>{props.itemToggle(props.id)}}>Completed</button></li>) :
+    (<li><button onClick={()=>{props.todoXClick(props.id)}}>X</button>
+        {props.task.task}
+        <button onClick={()=>{props.itemToggle(props.id)}}>Completed</button></li>)
 
 }
 

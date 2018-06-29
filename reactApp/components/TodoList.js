@@ -5,8 +5,9 @@ import Todo from './Todo'
 
 function TodoList(props){
   return (<ul>
-            {props.todos.map((data, i) => <Todo task ={data} todoXClick = {(e)=>{props.XClick(e)}}
-                                                index = {i} itemToggle = {(e)=>{props.toggleThis(e)}}/>)}
+            {props.todos.map((data, i) => <Todo key = {data._id} id = {data._id} task ={data}
+                                                todoXClick = {(e)=>{props.XClick(e)}}
+                                                itemToggle = {(e)=>{props.toggleThis(e)}}/>)}
           </ul>);
 }
 

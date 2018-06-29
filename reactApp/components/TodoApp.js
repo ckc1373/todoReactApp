@@ -2,13 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import InputLine from './InputLine'
 import TodoList from './TodoList'
+import axios from 'axios'
 
-let dummyData = [{ taskText: "Lorem ipsum dolor sit amet", completed: false },
-                   { taskText: "consectetur adipisicing elit, sed do eiusmod tempor ", completed: true },
-                    { taskText: "incididunt ut labore et dolore magna aliqua. Ut enim ad ", completed: true },
-                     { taskText: "inim veniam, quis nostrud exercitation ullam", completed: false }]
-
-
+const dbUrl = "http://localhost:3000/db";
 
 class TodoApp extends React.Component {
  constructor(props){
@@ -19,32 +15,65 @@ class TodoApp extends React.Component {
  }
 
  addTodo(task){
-    dummyData.push({taskText: task, completed: false})
-    this.setState({
-      todos: dummyData
-    })
+   let thisState = this;
+   axios.post(dbUrl + '/add', {task: task, completed: false})
+     .then(function (response) {
+       thisState.setState({ todos: [...thisState.state.todos, {task: task, completed: false}]});
+     })
+     .catch(function (error) {
+       console.log(error);
+     });
  }
 
- removeTodo(i){
-    dummyData.splice(i, 1)
-    this.setState({
-      todos: dummyData
+ removeTodo(id){
+   let thisState = this;
+   axios.post(dbUrl + '/remove', {id: id})
+    .then(function (response) {
+      let oldTodo = thisState.state.todos;
+      var index = oldTodo.findIndex((item) => {
+        return item._id === id
+      })
+      oldTodo.splice(index, 1)
+      thisState.setState({
+        todos: oldTodo
+      })
     })
- }
+    .catch(function (error) {
+      console.log('error', error);
+    });
+  }
 
- toggle(i){
-   (dummyData[i].completed) ?
-      dummyData[i].completed = false :
-      dummyData[i].completed = true
-   this.setState({
-     todos: dummyData
-   })
- }
+
+
+ toggle(id){
+   let thisState = this;
+   axios.post(dbUrl + '/toggle', {id: id})
+    .then(function (response) {
+      let oldTodo = thisState.state.todos;
+      var index = oldTodo.findIndex((item) => {
+        return item._id === id
+      })
+      oldTodo.splice(index, 1, response.data)
+      thisState.setState({
+        todos: oldTodo
+      })
+    })
+    .catch(function (error) {
+      console.log('error', error);
+    });
+  }
 
  componentDidMount(){
-   this.setState({
-     todos: dummyData
-   });
+   let thisState = this;
+   axios.get(dbUrl + '/all')
+    .then(function (response) {
+      thisState.setState({
+        todos: response.data
+      })
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
  }
 
  render(){
