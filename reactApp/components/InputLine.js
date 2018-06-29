@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 function InputLine(props){
   return(<div>
            <input type="text" placeholder ="Add an Item"></input>
-           <button type = "submit">Add Item</button>
+           <button type = "submit" onClick = {()=>{props.submit('Test Task')}}>Add Item</button>
          </div>)
 }
 
