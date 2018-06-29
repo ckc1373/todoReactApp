@@ -2,49 +2,52 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 
-const dummyData = ["Lorem ipsum dolor sit amet,", " consectetur adipisicing elit, sed do eiusmod tempor ",
-                  "incididunt ut labore et dolore magna aliqua. Ut enim ad ", "inim veniam, quis nostrud exercitation ullam"]
+const dummyData = [{ taskText: "Lorem ipsum dolor sit amet", completed: false },
+                   { taskText: "consectetur adipisicing elit, sed do eiusmod tempor ", completed: true },
+                    { taskText: "incididunt ut labore et dolore magna aliqua. Ut enim ad ", completed: true },
+                     { taskText: "inim veniam, quis nostrud exercitation ullam", completed: false }]
 
-class InputLine extends React.Component {
-  constructor(props){
-    super(props);
-  }
-  render(){
+
+  function InputLine(props){
     return(<div>
              <input type="text" placeholder ="Add an Item"></input>
              <button type = "submit">Add Item</button>
            </div>)
   }
-}
 
-class Todo extends React.Component {
-  constructor(props){
-    super(props);
-  }
-  render(){
-    return(<li><button>X</button>{this.props.task}</li>)
-  }
-}
 
-class TodoList extends React.Component {
-  constructor(props){
-    super(props);
+  function Todo(props){
+    let start;
+    let end;
+    return (props.task.completed) ?
+      (<li><button>X</button><strike>{props.task.taskText}</strike></li>) :
+      (<li><button>X</button>{props.task.taskText}</li>)
+
   }
-  render(){
+
+  function TodoList(props){
     return (<ul>
-              {dummyData.map((data) => <Todo task ={data}/>)}
+              {props.todos.map((data) => <Todo task ={data}/>)}
             </ul>);
   }
-}
+
 
 class TodoApp extends React.Component {
   constructor(props){
     super(props);
+    this.state = ({
+      todos: []
+    });
+  }
+  componentDidMount(){
+    this.setState({
+      todos: dummyData
+    });
   }
   render(){
     return (<div>
               <InputLine />
-              <TodoList />
+              <TodoList todos = {this.state.todos}/>
             </div>);
   }
 }
